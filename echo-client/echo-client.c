@@ -7,12 +7,10 @@
 #include <pthread.h>
 
 #define BUF_SIZE 1024 //max input buffer size
-#define RDY_MSG_SIZE 5 //max ready sign length
-#define SENDER 0
-#define RECEIVER 1
 
 void * send_msg(void * arg); //send message to server(for sender)
 void * recv_msg(void * arg); //receive message from server(for receiver)
+void usage();
 //void error_handling(char *msg);
 
 char msg[BUF_SIZE]; //message buffer
@@ -24,16 +22,12 @@ int main(int argc, char *argv[])
 
 //thread id for sender&receiver and thread return value(pthread_join)
     pthread_t snd_thread, rcv_thread;
-    void* thread_return;
 
     int str_len,ch=0;
-    char send_rdy_msg[]="READY: You are a sender\n";
-    char recv_rdy_msg[]="READY: You are a receiver\n";
-    char ready_msg[RDY_MSG_SIZE];
 
     //argv error handling
     if (argc != 3) {
-        printf("usage : %s <ip> <port> \n" , argv[0]);
+        usage();
         exit(1);
     }
 
@@ -61,55 +55,16 @@ int main(int argc, char *argv[])
         }
     }
 
-
-    //waiting for server's ready sign
-    /*while(1){
-        str_len=read(sock,ready_msg,RDY_MSG_SIZE);
-        if(str_len==2){ //if client is sender
-            fputs(send_rdy_msg,stdout);
-            ch=SENDER;
-            break;
-        }
-        else if(str_len==3){ //if client is receiver
-            fputs(recv_rdy_msg,stdout);
-            ch=RECEIVER;
-            break;
-        }
-    }
-    //thread create
-    if(ch==SENDER){
-        pthread_create(&snd_thread,NULL, send_msg, (void*)&sock);
-        pthread_join(snd_thread,&thread_return);
-    }
-
-    if(ch==RECEIVER){
-        pthread_create(&rcv_thread,NULL, recv_msg, (void*)&sock);
-        pthread_join(rcv_thread,&thread_return);
-    }*/
-
     //client socket connection close
     close(sock);
     return 0;
 }
 
-//sender
-void* send_msg(void* arg){
-
-    //client's file descriptor
-    int sock = *((int*)arg);
-
-//user input
-    fgets(msg,BUF_SIZE, stdin);
-
-//send message to server
-    write(sock,msg,strlen(msg));
-
-//socket close
-    close(sock);
-    return NULL;
+void usage(){
+    printf("syntax : echo-client <ip> <port>\nample : echo-client 192.168.10.2 1234\n");
+    return;
 }
 
-//receiver
 void* recv_msg(void* arg){
 
     //client's file descriptor
