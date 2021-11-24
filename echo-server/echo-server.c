@@ -40,10 +40,6 @@ int main(int argc, char * argv[]){
     //thread id(pthread_create)
     pthread_t t_id;
 
-    //sign of determining client type(server, receiver)
-    char send_rdy_msg[]="0";//"READY: You are a sender\n";
-    char recv_rdy_msg[]="00";//"READY: You are a receiver\n";
-
     int res=0;
     int port=atoi(argv[1]);
 
@@ -71,8 +67,6 @@ int main(int argc, char * argv[]){
                 return -1;
         }
     }
-
-    printf("whatthcxefuck?%d\n",flag);
 
     //create IPv4, TCP socket
     serv_sock = socket(PF_INET, SOCK_STREAM,0);
@@ -175,12 +169,6 @@ void* handle_clnt(void* arg){
 
     printf("clnt_cnt : %d\n",clnt_cnt);
     return NULL;
-}
-
-//send to receiver
-int send_msg(int clnt_sock, char* msg, int len){
-
-
 }
 
 //error handling
