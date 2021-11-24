@@ -8,8 +8,7 @@
 
 #define BUF_SIZE 1024 //max input buffer size
 
-void * send_msg(void * arg); //send message to server(for sender)
-void * recv_msg(void * arg); //receive message from server(for receiver)
+void * recv_msg(void * arg);
 void usage();
 //void error_handling(char *msg);
 
