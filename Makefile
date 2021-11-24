@@ -9,3 +9,11 @@ client:
 
 server:
 	cd echo-server; $(MAKE)
+
+clean: clean-client clean-server
+
+clean-client: 
+	cd echo-client; $(MAKE) clean
+
+clean-server:
+	cd echo-server; $(MAKE) clean
