@@ -13,7 +13,7 @@
 #define BROADCAST 2
 
 void *handle_clnt(void* arg); //client handler
-int send_msg(int clnt_sock, char* msg, int len); //send sender's message to receiver
+int send_msg(int clnt_sock, char* msg, int len);
 void usage();
 
 //number of client on the server
@@ -80,7 +80,7 @@ int main(int argc, char * argv[]){
     //allocate server address
     bind(serv_sock,(struct sockaddr*)&serv_adr, sizeof(serv_adr));
 
-    //listen for client(max number of 5)
+    //listen for client(max number of 100)
     listen(serv_sock , MAX_CLNT);
 
     while (1) {
@@ -114,12 +114,12 @@ void usage(){
 
 //client handling
 void* handle_clnt(void* arg){
+
     //file descriptor of client
     int clnt_sock = *((int*)arg);
     int str_len = 0, i;
     char msg[BUF_SIZE];
 
-    //read msg from client(sender)
     while(1){
         str_len = read(clnt_sock , msg , sizeof(msg));
         if(str_len == 0 || str_len == -1){
@@ -147,8 +147,8 @@ void* handle_clnt(void* arg){
             pthread_mutex_unlock(&mutx);
         }
     }
-
     pthread_mutex_lock(&mutx);
+
     //delete disconnected client
     for (i = 0; i < clnt_cnt; i++) {
 
